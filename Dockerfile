@@ -1,29 +1,21 @@
-FROM node:latest
+FROM node:18-alpine AS build
 LABEL maintainer "Elvis Bando <elvisbando@gmail.com>"
-ENV DEBIAN_FRONTEND noninteractive
+WORKDIR /app
 
-# Use the official Node.js image as the base image
-FROM node:latest AS build
-
-# Set the working directory
-ADD . /home/ubuntu/app
-WORKDIR /home/ubuntu/app
-
-# Install dependencies
-RUN npm install
-
-# Copy the rest of the application code
+# Install dependencies and build the client and server bundle
+COPY package*.json ./
+RUN npm ci --silent
 COPY . .
-
-# Build the application
 RUN npm run build
 
-# Use a lightweight server to serve the app
-FROM nginx:alpine
+FROM node:18-alpine AS runtime
+WORKDIR /app
+ENV NODE_ENV=production
 
-COPY --from=build /home/ubuntu/app/nginx.conf /etc/nginx/nginx.conf 
-# Copy the build files to the nginx server
-COPY --from=build /home/ubuntu/app/dist /usr/share/nginx/html
+# Copy built artifacts and install production deps
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/package*.json ./
+RUN npm ci --production --silent || true
 
-# Expose the port the app runs on
-EXPOSE 80
+EXPOSE 5000
+CMD ["node", "dist/index.js"]

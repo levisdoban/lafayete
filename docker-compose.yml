@@ -2,12 +2,13 @@
 version: '3.8'
 
 services:
-  lafayetteapp:
-    container_name: lafayetesite
+  app:
+    container_name: lafayette_app
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "5044:80"
+      - "5044:5000"
     environment:
       - NODE_ENV=production
+    restart: unless-stopped
