@@ -2,7 +2,6 @@ import express, { type Express } from "express";
 import fs from "fs";
 import path from "path";
 import { type Server } from "http";
-import viteConfig from "../vite.config";
 import { nanoid } from "nanoid";
 
 export function log(message: string, source = "express") {
@@ -17,8 +16,9 @@ export function log(message: string, source = "express") {
 }
 
 export async function setupVite(app: Express, server: Server) {
-  // lazy-import Vite so production bundles don't require it
+  // lazy-import Vite and vite config so production bundles don't require them
   const { createServer: createViteServer, createLogger } = await import("vite");
+  const { default: viteConfig } = await import("../vite.config");
 
   const viteLogger = createLogger();
 
@@ -70,8 +70,8 @@ export async function setupVite(app: Express, server: Server) {
 }
 
 export function serveStatic(app: Express) {
-  // when built, the client assets are placed alongside the server bundle in `dist`
-  const distPath = path.resolve(import.meta.dirname);
+  // client build is output to `dist/public` by Vite
+  const distPath = path.resolve(import.meta.dirname, "public");
 
   if (!fs.existsSync(distPath) || !fs.existsSync(path.join(distPath, "index.html"))) {
     throw new Error(
