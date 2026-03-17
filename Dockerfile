@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND noninteractive
 FROM node:latest AS build
 
 # Set the working directory
-ADD ./website /home/ubuntu/app
+ADD ./web /home/ubuntu/app
 WORKDIR /home/ubuntu/app
 
 # Install dependencies
