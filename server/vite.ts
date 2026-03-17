@@ -93,7 +93,8 @@ export async function setupVite(app: Express, server: Server) {
 
 export function serveStatic(app: Express) {
   // client build is output to `dist/public` by Vite
-  const distPath = path.resolve(import.meta.dirname, "public");
+  // Use process.cwd() to reliably locate the dist folder in containers
+  const distPath = path.resolve(process.cwd(), "dist", "public");
 
   if (!fs.existsSync(distPath) || !fs.existsSync(path.join(distPath, "index.html"))) {
     throw new Error(
