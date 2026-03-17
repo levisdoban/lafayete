@@ -16,10 +16,8 @@ export function log(message: string, source = "express") {
 }
 
 export async function setupVite(app: Express, server: Server) {
-  // lazy-import Vite and vite config so production bundles don't require them
+  // lazy-import Vite and plugins so production bundles don't require them
   const { createServer: createViteServer, createLogger } = await import("vite");
-  const { default: viteConfig } = await import("../vite.config");
-
   const viteLogger = createLogger();
 
   const serverOptions = {
@@ -28,12 +26,36 @@ export async function setupVite(app: Express, server: Server) {
     allowedHosts: true as const,
   };
 
+  // build a minimal Vite config inline to avoid importing the project's vite.config.ts
+  const clientRoot = path.resolve(import.meta.dirname, "..", "client");
+  const plugins = [] as any[];
+  try {
+    const reactPlugin = await import("@vitejs/plugin-react");
+    plugins.push(reactPlugin.default ? reactPlugin.default() : reactPlugin());
+  } catch (_) {}
+  try {
+    const overlay = await import("@replit/vite-plugin-runtime-error-modal");
+    plugins.push(overlay.default ? overlay.default() : overlay());
+  } catch (_) {}
+
+  const viteOptions = {
+    root: clientRoot,
+    plugins,
+    resolve: {
+      alias: {
+        "@": path.resolve(clientRoot, "src"),
+        "@shared": path.resolve(import.meta.dirname, "..", "shared"),
+        "@assets": path.resolve(import.meta.dirname, "..", "attached_assets"),
+      },
+    },
+  } as any;
+
   const vite = await createViteServer({
-    ...viteConfig,
+    ...viteOptions,
     configFile: false,
     customLogger: {
       ...viteLogger,
-      error: (msg, options) => {
+      error: (msg: any, options: any) => {
         viteLogger.error(msg, options);
         process.exit(1);
       },
