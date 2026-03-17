@@ -6,14 +6,14 @@ ENV DEBIAN_FRONTEND noninteractive
 FROM node:latest AS build
 
 # Set the working directory
-ADD ./web /home/ubuntu/app
+ADD . /home/ubuntu/app
 WORKDIR /home/ubuntu/app
 
 # Install dependencies
 RUN npm install
 
 # Copy the rest of the application code
-COPY ./web ./home/ubuntu/app
+COPY . .
 
 # Build the application
 RUN npm run build
