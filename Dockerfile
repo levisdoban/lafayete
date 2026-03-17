@@ -13,7 +13,7 @@ WORKDIR /home/ubuntu/app
 RUN npm install
 
 # Copy the rest of the application code
-COPY . .
+COPY ./web .
 
 # Build the application
 RUN npm run build
