@@ -40,7 +40,7 @@ export default function Contact() {
                       className="text-foreground hover:text-primary transition-colors text-lg"
                       data-testid="contact-email-link"
                     >
-                      service@lafayette.africa.com
+                      service@lafayette.africa
                     </a>
                     <p className="text-sm text-muted-foreground mt-1">
                       We typically respond within 24 hours
@@ -191,7 +191,7 @@ export default function Contact() {
             <a href="tel:+254722709005" className="bg-primary text-primary-foreground px-8 py-4 rounded-md font-semibold text-lg hover:bg-primary/90 transition-colors">
               Call Now: +254 722 709005
             </a>
-            <a href="mailto:service@lafayette.africa.com" className="border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground px-8 py-4 rounded-md font-semibold text-lg transition-colors">
+            <a href="mailto:service@lafayette.africa" className="border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground px-8 py-4 rounded-md font-semibold text-lg transition-colors">
               Email Us Today
             </a>
           </div>
