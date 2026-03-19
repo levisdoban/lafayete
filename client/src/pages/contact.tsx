@@ -15,7 +15,7 @@ export default function Contact() {
         primaryButtonText="Call Us Now"
         primaryButtonLink="tel:+254722709005"
         secondaryButtonText="Send Email"
-        secondaryButtonLink="mailto:service@lafayette.africa.com"
+        secondaryButtonLink="mailto:service@lafayette.africa"
         imageUrl={africanAssessmentSpecialist}
         imageAlt="Modern African business office environment"
       />
@@ -36,7 +36,7 @@ export default function Contact() {
                   <div>
                     <h4 className="font-semibold text-lg text-accent mb-2">Email</h4>
                     <a 
-                      href="mailto:service@lafayette.africa.com" 
+                      href="mailto:service@lafayette.africa" 
                       className="text-foreground hover:text-primary transition-colors text-lg"
                       data-testid="contact-email-link"
                     >
